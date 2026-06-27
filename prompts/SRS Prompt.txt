@@ -1,0 +1,21 @@
+Act as a senior software architect with over 15 years of experience.
+
+I am building a real-world online BookStore website using the MERN Stack (MongoDB Atlas, Express.js, React.js, Node.js).
+
+This project is intended for internship and portfolio purposes, so it should follow professional software engineering practices.
+
+Create a complete Software Requirements Specification (SRS) that includes:
+
+1. Project Overview
+2. Objectives
+3. Scope
+4. User Roles (Customer and Admin)
+5. Functional Requirements
+6. Non-Functional Requirements
+7. System Features
+8. User Stories
+9. Constraints
+10. Assumptions
+11. Future Enhancements
+
+Write it professionally in clear English.
