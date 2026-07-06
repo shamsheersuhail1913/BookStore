@@ -1,3 +1,5 @@
+import path from "path";
+import { fileURLToPath } from "url";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -18,6 +20,9 @@ import dashboardRoutes from "./routes/dashboard.routes.js";
 
 
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 
 /* ===========================
@@ -27,7 +32,7 @@ const app = express();
 // CORS
 app.use(
     cors({
-        origin: process.env.CORS_ORIGIN,
+        origin: process.env.CORS_ORIGIN || "http://localhost:5173",
         credentials: true,
     })
 );
@@ -81,6 +86,15 @@ app.use("/api/reviews", reviewRoutes);
 
 app.use("/api/dashboard", dashboardRoutes);
 
+if (process.env.NODE_ENV === "production") {
+    const clientBuildPath = path.resolve(__dirname, "../../client/dist");
+    app.use(express.static(clientBuildPath));
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(clientBuildPath, "index.html"));
+    });
+}
+
 /* ===========================
    ERROR HANDLERS
 =========================== */
@@ -88,6 +102,5 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use(notFound);
 
 app.use(errorHandler);
-
 
 export { app };
