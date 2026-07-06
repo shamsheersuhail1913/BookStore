@@ -13,4 +13,4 @@ export const COOKIE_OPTIONS = {
 };
 
 // Maximum JSON request size
-export const JSON_LIMIT = "16kb";
+export const JSON_LIMIT = "10mb";

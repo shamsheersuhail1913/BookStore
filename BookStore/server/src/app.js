@@ -8,6 +8,16 @@ import { errorHandler } from "./middleware/errorHandler.js";
 
 import { JSON_LIMIT } from "./constants/index.js";
 
+import bookRoutes from "./routes/book.routes.js";
+
+import authRoutes from "./routes/auth.routes.js";
+import cartRoutes from "./routes/cart.routes.js";
+import orderRoutes from "./routes/order.routes.js";
+import reviewRoutes from "./routes/review.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
+
+
+
 const app = express();
 
 /* ===========================
@@ -56,6 +66,20 @@ app.get("/", (req, res) => {
         message: "BookStore API is running successfully 🚀",
     });
 });
+// Book Routes
+app.use("/api/books", bookRoutes);
+
+app.use("/api/cart", cartRoutes);
+
+// Auth Routes
+app.use("/api/auth", authRoutes);
+
+// Order Routes
+app.use("/api/orders", orderRoutes);
+
+app.use("/api/reviews", reviewRoutes);
+
+app.use("/api/dashboard", dashboardRoutes);
 
 /* ===========================
    ERROR HANDLERS
@@ -64,5 +88,6 @@ app.get("/", (req, res) => {
 app.use(notFound);
 
 app.use(errorHandler);
+
 
 export { app };
