@@ -4,16 +4,15 @@ import BookCard from "../components/BookCard";
 import { BookCardSkeleton } from "../components/Loader";
 import { FaSearch, FaSortAmountDown, FaFilter, FaBookOpen } from "react-icons/fa";
 
-const CATEGORIES = ["All", "Fiction", "Non-Fiction", "Science", "History", "Technology", "Biography", "Fantasy", "Romance", "Mystery"];
 const PAGE_SIZE = 9;
 
 function Home() {
-    const [books, setBooks]         = useState([]);
-    const [loading, setLoading]     = useState(true);
-    const [search, setSearch]       = useState("");
-    const [category, setCategory]   = useState("All");
-    const [sort, setSort]           = useState("newest");
-    const [page, setPage]           = useState(1);
+    const [books, setBooks]       = useState([]);
+    const [loading, setLoading]   = useState(true);
+    const [search, setSearch]     = useState("");
+    const [category, setCategory] = useState("All");
+    const [sort, setSort]         = useState("newest");
+    const [page, setPage]         = useState(1);
 
     const fetchBooks = useCallback(async () => {
         setLoading(true);
@@ -29,6 +28,9 @@ function Home() {
 
     useEffect(() => { fetchBooks(); }, [fetchBooks]);
 
+    // Build categories dynamically from actual book data
+    const categories = ["All", ...new Set(books.map(b => b.category).filter(Boolean))];
+
     // Filter + search + sort
     const filtered = books
         .filter(b => category === "All" || b.category === category)
@@ -39,30 +41,19 @@ function Home() {
         .sort((a, b) => {
             if (sort === "price-asc")  return a.price - b.price;
             if (sort === "price-desc") return b.price - a.price;
-            return 0; // newest = API order
+            return 0;
         });
 
     const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
     const paginated  = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-    function handleSearch(e) {
-        e.preventDefault();
-        setPage(1);
-    }
-
-    function handleCategory(cat) {
-        setCategory(cat);
-        setPage(1);
-    }
-
-    function handleSort(e) {
-        setSort(e.target.value);
-        setPage(1);
-    }
+    function handleSearch(e) { e.preventDefault(); setPage(1); }
+    function handleCategory(cat) { setCategory(cat); setPage(1); }
+    function handleSort(e) { setSort(e.target.value); setPage(1); }
 
     return (
         <>
-            {/* ── Hero ── */}
+            {/* Hero */}
             <section className="hero-section">
                 <div className="container position-relative">
                     <div className="row align-items-center">
@@ -92,13 +83,13 @@ function Home() {
                 </div>
             </section>
 
-            {/* ── Main content ── */}
+            {/* Main content */}
             <div className="page-wrapper">
                 <div className="container">
 
-                    {/* Category chips */}
+                    {/* Category chips — dynamic from DB */}
                     <div className="d-flex gap-2 flex-wrap mb-4">
-                        {CATEGORIES.map(cat => (
+                        {categories.map(cat => (
                             <button
                                 key={cat}
                                 className={`category-chip ${category === cat ? "active" : ""}`}
@@ -127,7 +118,7 @@ function Home() {
                         </div>
                     </div>
 
-                    {/* Grid */}
+                    {/* Book grid */}
                     {loading ? (
                         <div className="row g-4">
                             {Array.from({ length: PAGE_SIZE }).map((_, i) => (
